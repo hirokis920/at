@@ -14,7 +14,7 @@ type cell struct {
 	a int64
 }
 
-func main() {
+func p3() {
 
 	var n, m int64
 	fmt.Scan(&n, &m)

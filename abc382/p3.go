@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -16,35 +15,41 @@ func main() {
 	reader := bufio.NewReaderSize(os.Stdin, 1<<20)
 	line, _ := reader.ReadString('\n')
 	parts1 := strings.Fields(strings.TrimSpace(line))
-
 	bishokudo := make([]int, n)
+	bishokumin := 200000
 	for i := 0; i < n; i++ {
 		bishokudo[i], _ = strconv.Atoi(parts1[i])
-		if i != 0 && bishokudo[i-1] < bishokudo[i] {
-			bishokudo[i] = bishokudo[i-1]
+		if bishokumin > bishokudo[i] {
+			bishokumin = bishokudo[i]
 		}
 	}
-
 	line2, _ := reader.ReadString('\n')
 	parts2 := strings.Fields(strings.TrimSpace(line2))
 	umami := make([]int, m)
+
 	for i := 0; i < m; i++ {
 		umami[i], _ = strconv.Atoi(parts2[i])
 	}
 
+	eated := false
 	for i := 0; i < m; i++ {
+		eated = false
 		a := umami[i]
-
-		i := sort.Search(n, func(i int) bool {
-			return bishokudo[i] <= a
-		})
-		if i == n {
+		if a < bishokumin {
 			fmt.Println(-1)
 			continue
 		}
-
-		fmt.Println(i + 1)
-
+		for j := 0; j < n; j++ {
+			b := bishokudo[j]
+			if a >= b {
+				fmt.Println(j + 1)
+				eated = true
+				break
+			}
+		}
+		if !eated {
+			fmt.Println(-1)
+		}
 	}
 
 }
